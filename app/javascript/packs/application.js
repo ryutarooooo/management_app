@@ -15,3 +15,14 @@ require("channels")
 //
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
+
+require("bootstrap/dist/js/bootstrap")
+
+// Chart.js
+require('chart.js')
+
+// カレンダー
+require('flatpickr')
+require('flatpickr/dist/l10n/ja')
+// カレンダーの色を変更
+require("flatpickr/dist/themes/material_blue.css")
