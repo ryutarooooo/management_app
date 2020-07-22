@@ -1,71 +1,31 @@
-<p class="mt-4">ボタンを押したときにモーダルが表示されれば，「Bootstrap」の導入はOKです</p>
-<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#test-modal">モーダル</button>
-<!-- ボタンを押したとき，以下のモーダルが出現 -->
-<div class="modal fade" id="test-modal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">タイトル</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>本文はここに書きます</p>
-      </div>
-      <div class="modal-footer">
-        <p>フッターはここに書きます</p>
-      </div>
+<%= Gon::Base.render_data %>
+<div class="row no-gutters">
+  <div class="input-group col-sm-6 pr-sm-3 mt-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text">開始</span>
     </div>
+    <input type="text" id="start-calendar" class="form-control bg-white text-center">
+  </div>
+  <div class="input-group col-sm-6 pl-sm-3 mt-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text">終了</span>
+    </div>
+    <input type="text" id="end-calendar" class="form-control bg-white text-center">
   </div>
 </div>
-<p class="mt-4">折れ線グラフが表示されていれば，「Chart.js」の導入はOKです</p>
-<canvas id="line-chart"></canvas>
-​
-<script>
-  // 本来 Javascript をここに書くべきではありません。プログラムの移動方法は後に解説します
-  
-  // 折れ線グラフのデータ（値を変更するとグラフが変化することを確認してみて下さい）
-  let lineLabel = ['1/1', '1/2', '1/4', '1/5', '1/6', '1/7']
-  let lineData = [60.3, 61.1, 60.8, null, 60.5, 61.4]
-  
-  // 折れ線グラフのオプション
-  
-  const lineChartData = {
-      labels: lineLabel,
-      datasets: [{
-          label: '体重(kg)',
-          data: lineData,
-          backgroundColor: 'rgba(255, 99, 132, 0.2)',
-          borderColor: 'rgba(255, 99, 132, 1)',
-          borderWidth: 1,
-          spanGaps: true
-      }]
-  }
-  
-  const lineChartOption = {
-      title: {
-          display: true,
-          text: '折れ線グラフ'
-      },
-      tooltips: {
-          callbacks: {
-              // ホバー（スマホならタップ）時のラベル表示を変更
-              title: function (tooltipItems) {
-                  return tooltipItems[0].xLabel.replace(/^(\d+).(\d+)$/, ' $1 月 $2 日')
-              },
-              label: function (tooltipItem) {
-                  return '体重: ' + tooltipItem.yLabel + 'kg'
-              }
-          }
-      }
-  }
-  
-  // 折れ線グラフを表示
-  const lineChartContext = document.getElementById("line-chart").getContext('2d')
-  new Chart(lineChartContext, {
-      type: 'line',
-      data: lineChartData,
-      options: lineChartOption
-  })
-</script>
+<div class="row">
+  <div class="col-6 col-sm-3">
+    <input type="button" value="過去１週間" id="a-week-button" class="btn btn-success btn-block mt-3">
+  </div>
+  <div class="col-6 col-sm-3">
+    <input type="button" value="過去２週間" id="two-weeks-button" class="btn btn-success btn-block mt-3">
+  </div>
+  <div class="col-6 col-sm-3">
+    <input type="button" value="過去１ヶ月" id="a-month-button" class="btn btn-success btn-block mt-3">
+  </div>
+  <div class="col-6 col-sm-3">
+    <input type="button" value="過去３ヶ月" id="three-months-button" class="btn btn-success btn-block mt-3">
+  </div>
+</div>
+
+<canvas id="chart-weight" class="mt-5"></canvas>
