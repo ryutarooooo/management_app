@@ -1,25 +1,16 @@
 <%= Gon::Base.render_data %>
-<p class="mt-4">ボタンを押したときにモーダルが表示されれば，「Bootstrap」の導入はOKです</p>
-<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#test-modal">モーダル</button>
-<!-- ボタンを押したとき，以下のモーダルが出現 -->
-<div class="modal fade" id="test-modal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">タイトル</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>本文はここに書きます</p>
-      </div>
-      <div class="modal-footer">
-        <p>フッターはここに書きます</p>
-      </div>
-    </div>
+<div class="row">
+  <div class="col-6 col-sm-3">
+    <input type="button" value="過去１週間" id="a-week-button" class="btn btn-success btn-block mt-3">
+  </div>
+  <div class="col-6 col-sm-3">
+    <input type="button" value="過去２週間" id="two-weeks-button" class="btn btn-success btn-block mt-3">
+  </div>
+  <div class="col-6 col-sm-3">
+    <input type="button" value="過去１ヶ月" id="a-month-button" class="btn btn-success btn-block mt-3">
+  </div>
+  <div class="col-6 col-sm-3">
+    <input type="button" value="過去３ヶ月" id="three-months-button" class="btn btn-success btn-block mt-3">
   </div>
 </div>
-<p class="mt-4">折れ線グラフが表示されていれば，「Chart.js」の導入はOKです</p>
-<canvas id="line-chart"></canvas>
-​
+<canvas id="chart-weight" class="mt-5"></canvas>

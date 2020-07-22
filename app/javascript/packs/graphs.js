@@ -1,47 +1,69 @@
 document.addEventListener('turbolinks:load', () => {
-  // 本来 Javascript をここに書くべきではありません。プログラムの移動方法は後に解説します
+  // '2020-01-12'のような文字列から，Javascriptの日付オブジェクトを取得する関数
+  // setHoursを使用しないと，時差の影響で0時にならないため注意！
+  const convertDate = (date) => new Date(new Date(date).setHours(0, 0, 0, 0))
 
-  // 折れ線グラフのデータ（値を変更するとグラフが変化することを確認してみて下さい）
-  let lineLabel = gon.chart_label
-  let lineData = gon.chart_data
+  const TODAY = convertDate(new Date())
+  const A_WEEK_AGO = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() - 6)
+  const TWO_WEEKS_AGO = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() - 13)
+  const A_MONTH_AGO = new Date(TODAY.getFullYear(), TODAY.getMonth() - 1, TODAY.getDate() + 1)
+  const THREE_MONTHS_AGO = new Date(TODAY.getFullYear(), TODAY.getMonth() - 3, TODAY.getDate() + 1)
 
-  // 折れ線グラフのオプション
 
-  const lineChartData = {
-    labels: lineLabel,
-    datasets: [{
-      label: '体重(kg)',
-      data: lineData,
-      backgroundColor: 'rgba(255, 99, 132, 0.2)',
-      borderColor: 'rgba(255, 99, 132, 1)',
-      borderWidth: 1,
-      spanGaps: true
-    }]
-  }
+  const chartWeightContext = document.getElementById("chart-weight").getContext('2d')
 
-  const lineChartOption = {
-    title: {
-      display: true,
-      text: '折れ線グラフ'
-    },
-    tooltips: {
-      callbacks: {
-        // ホバー（スマホならタップ）時のラベル表示を変更
-        title: function (tooltipItems) {
-          return tooltipItems[0].xLabel.replace(/^(\d+).(\d+)$/, ' $1 月 $2 日')
-        },
-        label: function (tooltipItem) {
-          return '体重: ' + tooltipItem.yLabel + 'kg'
+   let chartWeight
+
+  
+  const drawGraph = (from, to) => {
+   
+    let records = gon.weight_records.filter((record) => {
+      let date = convertDate(record.date)
+      return from <= date && date <= to
+    })
+
+    
+    let dates = records.map((record) => {
+     
+      return record.date.replace(/^\d+-0*(\d+)-0*(\d+)$/, '$1/$2')
+    })
+
+  
+    let weights = records.map((record) => record.weight)
+
+    let weightData = {
+      labels: dates,
+      datasets: [{
+        label: '体重(kg)',
+        data: weights,
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 1,
+        spanGaps: true
+      }]
+    }
+
+    let weightOption = {
+      tooltips: {
+        callbacks: {
+
+          title: function (tooltipItems) {
+            return tooltipItems[0].xLabel.replace(/^(\d+).(\d+)$/, ' $1 月 $2 日')
+          },
+          label: function (tooltipItem) {
+            return '体重: ' + tooltipItem.yLabel + 'kg'
+          }
         }
       }
     }
+
+    new Chart(chartWeightContext, {
+      type: 'line',
+      data: weightData,
+      options: weightOption
+    })
   }
 
-  // 折れ線グラフを表示
-  const lineChartContext = document.getElementById("line-chart").getContext('2d')
-  new Chart(lineChartContext, {
-    type: 'line',
-    data: lineChartData,
-    options: lineChartOption
-  })
+ 
+  drawGraph(A_WEEK_AGO, TODAY)
 })
