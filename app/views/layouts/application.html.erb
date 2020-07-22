@@ -10,6 +10,10 @@
   </head>
   <body>
     <div class="graph-container">
+      <%= render 'shared/header' %>
+      <% if controller_name == 'graphs' %>
+        <%= render 'shared/flash_messages' %>
+      <% end %>
       <%= yield %>
     </div>
   </body>
