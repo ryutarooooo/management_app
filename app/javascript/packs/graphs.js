@@ -1,6 +1,6 @@
 document.addEventListener('turbolinks:load', () => {
 
-   
+
     // '2020-01-12'のような文字列から，Javascriptの日付オブジェクトを取得する関数
     // setHoursを使用しないと，時差の影響で0時にならないため注意！
     const convertDate = (date) => new Date(new Date(date).setHours(0, 0, 0, 0))
@@ -13,7 +13,7 @@ document.addEventListener('turbolinks:load', () => {
 
     flatpickr.localize(flatpickr.l10ns.ja)
 
-const drawGraphForPeriod = () => {
+    const drawGraphForPeriod = () => {
         let from = convertDate(document.getElementById('start-calendar').value)
         let to = convertDate(document.getElementById('end-calendar').value)
 
@@ -25,16 +25,26 @@ const drawGraphForPeriod = () => {
     }
 
     const periodCalendarOption = {
-    
+
         disableMobile: true,
-      minDate: START_DATE,
+        minDate: START_DATE,
         maxDate: END_DATE,
         onChange: drawGraphForPeriod
     }
 
-  
+
+
+
     const startCalendarFlatpickr = flatpickr('#start-calendar', periodCalendarOption)
     const endCalendarFlatpickr = flatpickr('#end-calendar', periodCalendarOption)
+
+    flatpickr('#new-calendar', {
+        disableMobile: true,
+        // // 記録のある日付を選択できないようにする
+        disable: gon.recorded_dates,
+        defaultDate: 'today',
+    })
+
 
     const TODAY = convertDate(new Date())
     const A_WEEK_AGO = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate() - 6)
@@ -42,24 +52,24 @@ const drawGraphForPeriod = () => {
     const A_MONTH_AGO = new Date(TODAY.getFullYear(), TODAY.getMonth() - 1, TODAY.getDate() + 1)
     const THREE_MONTHS_AGO = new Date(TODAY.getFullYear(), TODAY.getMonth() - 3, TODAY.getDate() + 1)
 
-   
+
     const chartWeightContext = document.getElementById("chart-weight").getContext('2d')
 
-     let chartWeight
+    let chartWeight
 
-    
+
     const drawGraph = (from, to) => {
         let records = gon.weight_records.filter((record) => {
             let date = convertDate(record.date)
             return from <= date && date <= to
         })
 
-      
+
         let dates = records.map((record) => {
             return record.date.replace(/^\d+-0*(\d+)-0*(\d+)$/, '$1/$2')
         })
 
-       
+
         let weights = records.map((record) => record.weight)
 
         let weightData = {
@@ -87,7 +97,7 @@ const drawGraphForPeriod = () => {
             }
         }
 
-       if (!chartWeight) {
+        if (!chartWeight) {
             chartWeight = new Chart(chartWeightContext, {
                 type: 'line',
                 data: weightData,
@@ -104,9 +114,10 @@ const drawGraphForPeriod = () => {
         from = maxDate(from, START_DATE)
         let to = minDate(TODAY, END_DATE)
         drawGraph(from, to)
-         startCalendarFlatpickr.setDate(from)
-            endCalendarFlatpickr.setDate(to)
+        startCalendarFlatpickr.setDate(from)
+        endCalendarFlatpickr.setDate(to)
     }
+
 
     document.getElementById('a-week-button').addEventListener('click', () => {
         drawGraphToToday(A_WEEK_AGO)
