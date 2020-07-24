@@ -68,19 +68,38 @@ document.addEventListener('turbolinks:load', () => {
 
             let weights = records.map((record) => record.weight)
 
-            let weightData = {
-                labels: dates,
-                datasets: [{
-                    label: '体重(kg)',
-                    data: weights,
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1,
-                    spanGaps: true
-                }]
+
+            let weightDatasets = {
+                type: 'line',
+                label: '体重(kg)',
+                data: weights,
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1,
+                spanGaps: true,
+                fill: false,
+                yAxisID: 'y-axis-weight'
             }
 
-            let weightOption = {
+            let distances = records.map((record) => record.distance)
+
+            let distanceDatasets = {
+                type: 'bar',
+                label: '距離(km)',
+                data: distances,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                spanGaps: true,
+                yAxisID: 'y-axis-distance',
+            }
+
+            let graphData = {
+                labels: dates,
+                datasets: [weightDatasets, distanceDatasets]
+            }
+
+            let options = {
                 tooltips: {
                     callbacks: {
                         title: function (tooltipItems) {
@@ -90,18 +109,40 @@ document.addEventListener('turbolinks:load', () => {
                             return '体重: ' + tooltipItem.yLabel + 'kg'
                         }
                     }
+                },
+                scales: {
+                    yAxes: [{
+                            id: 'y-axis-weight', // Y軸のID
+                            position: 'left', // どちら側に表示される軸か？
+                            ticks: { // スケール
+                                suggestedMax: 50,
+                                suggestedMin: 70,
+                            }
+                        },
+                        {
+                            id: 'y-axis-distance',
+                            position: 'right',
+                            ticks: {
+                                max: 10,
+                                min: 0,
+                            },
+                            gridLines: {
+                                display: false,
+                            }
+                        }
+                    ]
                 }
             }
 
             if (!chartWeight) {
                 chartWeight = new Chart(chartWeightContext, {
-                    type: 'line',
-                    data: weightData,
-                    options: weightOption
+                    type: 'bar',
+                    data: graphData,
+                    options: options
                 })
             } else {
-                chartWeight.data = weightData
-                chartWeight.options = weightOption
+                chartWeight.data = graphData
+                chartWeight.options = options
                 chartWeight.update()
             }
         }
@@ -134,9 +175,11 @@ document.addEventListener('turbolinks:load', () => {
 
         const editCalendar = document.getElementById('edit-calendar')
         const editWeight = document.getElementById('edit-weight')
+        const editDistance = document.getElementById('edit-distance')
         const inputWeight = () => {
             let record = gon.graph_records.find((record) => record.date === editCalendar.value)
             editWeight.value = record.weight
+            editDistance.value = record.distance
         }
 
         // 記録編集用のカレンダー
