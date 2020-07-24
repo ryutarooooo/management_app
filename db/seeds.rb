@@ -10,6 +10,9 @@ MIN_WEIGHT = 600
 MAX_WEIGHT = 620
 DIV_CONSTANT = 10
 
+MIN_DISTANCE = 10
+MAX_DISTANCE = 100
+
 user = User.find_or_create_by!(email: EMAIL) do |user|
   user.password = PASSWORD
   puts "テストユーザーの初期データインポートに成功しました。"
@@ -25,7 +28,9 @@ graphs = []
     date: date,
 
     weight: rand(MIN_WEIGHT..MAX_WEIGHT).to_f / DIV_CONSTANT,
+
+    distance: rand(MIN_DISTANCE..MAX_DISTANCE).to_f / DIV_CONSTANT,
   }
 end
 Graph.create!(graphs)
-puts "体重の初期データ投入に成功しました！"
+puts "ユーザーの初期データ投入に成功しました！"
