@@ -104,9 +104,6 @@ document.addEventListener('turbolinks:load', () => {
                     callbacks: {
                         title: function (tooltipItems) {
                             return tooltipItems[0].xLabel.replace(/^(\d+).(\d+)$/, ' $1 月 $2 日')
-                        },
-                        label: function (tooltipItem) {
-                            return '体重: ' + tooltipItem.yLabel + 'kg'
                         }
                     }
                 },
@@ -114,21 +111,17 @@ document.addEventListener('turbolinks:load', () => {
                     yAxes: [{
                             id: 'y-axis-weight', // Y軸のID
                             position: 'left', // どちら側に表示される軸か？
-                            ticks: { // スケール
-                                suggestedMax: 50,
-                                suggestedMin: 70,
-                            }
                         },
                         {
                             id: 'y-axis-distance',
                             position: 'right',
-                            ticks: {
-                                max: 10,
-                                min: 0,
-                            },
                             gridLines: {
                                 display: false,
-                            }
+                            },
+                            ticks: {
+                                // y軸のメモリを 0 からスタートに強制
+                                beginAtZero: true
+                            },
                         }
                     ]
                 }
