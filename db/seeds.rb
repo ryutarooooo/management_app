@@ -1,8 +1,7 @@
-EMAIL = "test@example.com"
-PASSWORD = "password"
+EMAIL = "guest@example.com"
 
 START_DATE = Date.today - 11.months
-END_DATE = Date.today + 1.months
+END_DATE = Date.today + 11.months
 
 NO_RECORD_CONSTANT = 5
 
@@ -14,7 +13,7 @@ MIN_DISTANCE = 10
 MAX_DISTANCE = 100
 
 user = User.find_or_create_by!(email: EMAIL) do |user|
-  user.password = PASSWORD
+  user.password = SecureRandom.urlsafe_base64
   puts "テストユーザーの初期データインポートに成功しました。"
 end
 
