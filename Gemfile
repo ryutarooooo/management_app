@@ -26,6 +26,10 @@ gem 'jbuilder', '~> 2.7'
 # gem 'image_processing', '~> 1.2'
 
 # Reduces boot times through caching; required in config/boot.rb
+group :production, :staging do
+  gem 'unicorn'
+end
+
 gem 'bootsnap', '>= 1.4.2', require: false
 
 gem 'devise'
